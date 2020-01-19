@@ -10,9 +10,20 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 0) do
+ActiveRecord::Schema.define(version: 2020_01_19_141405) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "stories", force: :cascade do |t|
+    t.string "name"
+    t.integer "articles_count"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["articles_count"], name: "index_stories_on_articles_count"
+    t.index ["created_at"], name: "index_stories_on_created_at"
+    t.index ["name"], name: "index_stories_on_name"
+    t.index ["updated_at"], name: "index_stories_on_updated_at"
+  end
 
 end

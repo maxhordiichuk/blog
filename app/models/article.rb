@@ -16,5 +16,7 @@ class Article < ApplicationRecord
 
   enum kind: { blog_post: 0, facebook_post: 1, tweet: 2 }
 
+  default_scope { order(created_at: :desc) }
+
   validates :name, :text, :kind, presence: true
 end

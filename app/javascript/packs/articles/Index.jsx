@@ -9,7 +9,9 @@ class Index extends Component {
     super();
 
     this.state = {
-      articles: []
+      articles: [],
+      query: "",
+      order: ""
     };
   }
 
@@ -17,11 +19,20 @@ class Index extends Component {
     this.fetchArticles();
   }
 
-  fetchArticles = ({query = ""} = {}) => {
-    axios.get('/articles.json', {params: {query}})
+  fetchArticles = ({query, order, onSuccess} = {}) => {
+    query = query === undefined ? this.state.query : query;
+    order = order === undefined ? this.state.order : order;
+
+    axios.get('/articles.json', {params: {query, order}})
       .then((response) => {
-        this.setState({articles: response.data.articles});
+        this.setState({articles: response.data.articles, query, order});
+        onSuccess && onSuccess();
       });
+  };
+
+  orderBy = (field) => {
+    const newOrder = this.state.order === `${field}_asc` ? `${field}_desc` : `${field}_asc`;
+    this.fetchArticles({order: newOrder});
   };
 
   render() {
@@ -35,10 +46,10 @@ class Index extends Component {
         <table className="table">
           <thead className="thead-light">
           <tr>
-            <th scope="col">#</th>
-            <th scope="col">Name</th>
-            <th scope="col">Type</th>
-            <th scope="col">Text</th>
+            <th scope="col" onClick={() => this.orderBy("id")}>#</th>
+            <th scope="col" onClick={() => this.orderBy("name")}>Name</th>
+            <th scope="col" onClick={() => this.orderBy("kind")}>Type</th>
+            <th scope="col" onClick={() => this.orderBy("text")}>Text</th>
           </tr>
           </thead>
           <tbody>

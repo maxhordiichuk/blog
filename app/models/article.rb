@@ -6,6 +6,7 @@ class Article < ApplicationRecord
     against: %i[name text],
     using: {
       tsearch: {
+        dictionary: 'english',
         tsvector_column: 'tsv'
       }
     }

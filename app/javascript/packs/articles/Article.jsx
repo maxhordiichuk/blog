@@ -1,19 +1,15 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 
+const ARTICLE_TYPES = {
+  blog_post: "Blog Post",
+  facebook_post: "Facebook Post",
+  tweet: "Tweet"
+};
+
 class Article extends Component {
   prettyArticleType(article) {
-    switch (article.kind) {
-      case "blog_post": {
-        return "Blog Post"
-      }
-      case "facebook_post": {
-        return "Facebook Post"
-      }
-      case "tweet": {
-        return "Tweet"
-      }
-    }
+    return ARTICLE_TYPES[article.kind];
   }
 
   render() {

@@ -3,26 +3,43 @@ module Articles
     include Interactor
 
     ORDER_ATTRIBUTES = %w[id name text kind].freeze
+    GROUP_ATTRIBUTES = %w[id name text kind story].freeze
     ORDER_DIRECTIONS = %w[asc desc].freeze
 
     def call
-      params = context.params
       articles = Article.all
-      articles = articles.search(params[:query]) if params[:query].present?
-      articles = articles.reorder(parsed_order) if params[:order].present?
-      context.articles = articles
+      articles = filter(articles)
+      articles = order(articles)
+      context.articles = group(articles)
     end
 
     private
 
-    def parsed_order
+    def filter(articles)
+      context.params[:query].present? ? articles.search(context.params[:query]) : articles
+    end
+
+    def order(articles)
+      return articles if context.params[:order].blank?
+
       order_query = context.params[:order].to_s.split('_')
-      return {} if order_query.size != 2
+      return articles if order_query.size != 2
 
       attribute, order = order_query
-      return {} unless ORDER_ATTRIBUTES.include?(attribute) && ORDER_DIRECTIONS.include?(order)
+      return articles unless ORDER_ATTRIBUTES.include?(attribute) && ORDER_DIRECTIONS.include?(order)
 
-      { attribute => order }
+      articles.reorder(attribute => order)
+    end
+
+    def group(articles)
+      group = context.params[:group]
+      return articles if group.blank? || !GROUP_ATTRIBUTES.include?(group)
+
+      if group == 'story'
+        Articles::GroupByStory.call!.stories
+      else
+        articles.group_by(&group.to_sym)
+      end
     end
   end
 end

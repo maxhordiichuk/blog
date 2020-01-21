@@ -1,15 +1,18 @@
 import React, {Component} from 'react';
-import axios from 'axios';
+import {Link} from "react-router-dom";
+
+import apiClient from "../helpers/apiClient";
 
 import Article from './Article';
 import SearchBar from "./SearchBar";
 import GroupSelect from "./GroupSelect";
 import FieldGroups from "./FieldGroups";
 import StoryGroups from "./StoryGroups";
+import ApplicationLayout from "../layouts/ApplicationLayout";
 
 class Index extends Component {
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
 
     this.state = {
       articles: [],
@@ -28,7 +31,7 @@ class Index extends Component {
     order = order === undefined ? this.state.order : order;
     group = group === undefined ? this.state.group : group;
 
-    axios.get('/articles.json', {params: {query, order, group}})
+    apiClient().get('/articles.json', {params: {query, order, group}})
       .then((response) => {
         this.setState({articles: response.data.articles, query, order, group});
       });
@@ -52,10 +55,11 @@ class Index extends Component {
           <th scope="col" onClick={() => this.orderBy("name")}>Name</th>
           <th scope="col" onClick={() => this.orderBy("kind")}>Type</th>
           <th scope="col" onClick={() => this.orderBy("text")}>Text</th>
+          <th scope="col"/>
         </tr>
         </thead>
         <tbody>
-        {articles.map(article => <Article key={article.id} article={article}/>)}
+        {articles.map(article => <Article key={article.id} article={article} fetchArticles={this.fetchArticles}/>)}
         </tbody>
       </table>
     );
@@ -74,8 +78,11 @@ class Index extends Component {
     const {group, articles} = this.state;
 
     return (
-      <div className="container pt-4">
+      <ApplicationLayout>
         <div className="mb-4">
+          <div className="mb-3 text-right">
+            <Link to="/articles/new" className="btn btn-success">New Article</Link>
+          </div>
           <div className="row">
             <div className="col-6">
               <SearchBar fetchArticles={this.fetchArticles}/>
@@ -86,7 +93,7 @@ class Index extends Component {
           </div>
         </div>
         {group ? this.renderGroups() : this.renderTable(articles)}
-      </div>
+      </ApplicationLayout>
     );
   }
 }

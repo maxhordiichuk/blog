@@ -36,6 +36,6 @@ class Article < ApplicationRecord
   validates :name, :text, :kind, presence: true
 
   def as_json(_options)
-    { id: id, name: name, text: text, kind: kind }
+    { id: id, story_id: story_id, name: name, text: text, kind: kind }
   end
 end

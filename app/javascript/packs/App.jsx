@@ -1,11 +1,11 @@
 import React, {Component} from 'react';
 import ReactDOM from 'react-dom';
 
-import ArticleIndex from "./articles/Index";
+import Router from "./Router";
 
 class App extends Component {
   render() {
-    return <ArticleIndex/>;
+    return <Router/>
   }
 }
 

@@ -72,7 +72,7 @@ class Index extends Component {
     if (group === "story") {
       return <StoryGroups articles={articles} renderArticlesTable={this.renderTable}/>;
     }
-    return <FieldGroups articles={articles} renderArticlesTable={this.renderTable}/>;
+    return <FieldGroups articles={articles} renderArticlesTable={this.renderTable} group={group}/>;
   };
 
   render() {

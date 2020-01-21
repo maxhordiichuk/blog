@@ -4,12 +4,12 @@ import PropTypes from "prop-types";
 import {ARTICLE_TYPES} from "../constants";
 
 class FieldGroups extends Component {
-  renderGroupField(value) {
-    if (this.state.group === "kind") {
+  renderGroupField = (value) => {
+    if (this.props.group === "kind") {
       return ARTICLE_TYPES[value];
     }
     return value;
-  }
+  };
 
   render() {
     const {articles, renderArticlesTable} = this.props;
@@ -29,6 +29,7 @@ class FieldGroups extends Component {
 
 FieldGroups.propTypes = {
   articles: PropTypes.object.isRequired,
+  group: PropTypes.string.isRequired,
   renderArticlesTable: PropTypes.func.isRequired
 };
 

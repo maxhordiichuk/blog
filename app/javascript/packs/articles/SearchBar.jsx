@@ -2,19 +2,29 @@ import React, {Component} from "react";
 import PropTypes from "prop-types";
 
 class SearchBar extends Component {
-  onChange = (event) => {
-    this.setState({query: event.target.value});
+  onBlur = (event) => {
+    this.fetchArticles(event);
   };
 
   onKeyDown = (event) => {
     if (event.keyCode === 13) {
-      this.props.fetchArticles({query: event.target.value});
+      this.fetchArticles(event);
     }
+  };
+
+  fetchArticles = (event) => {
+    this.props.fetchArticles({query: event.target.value});
   };
 
   render() {
     return (
-      <input type="search" className="form-control" placeholder="Search" onKeyDown={this.onKeyDown}/>
+      <input
+        type="search"
+        className="form-control"
+        placeholder="Search"
+        onKeyDown={this.onKeyDown}
+        onBlur={this.onBlur}
+      />
     );
   }
 }

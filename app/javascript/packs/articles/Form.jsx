@@ -45,7 +45,8 @@ class Form extends Component {
   };
 
   renderErrors(name) {
-    const errors = this.state.article.errors[name];
+    const {article} = this.state;
+    const errors = article.errors && article.errors[name];
     if (_.isEmpty(errors)) return null;
     return <div className="text-danger">{errors.join(", ")}</div>;
   }

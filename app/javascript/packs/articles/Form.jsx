@@ -22,9 +22,12 @@ class Form extends Component {
   }
 
   fetchStories = () => {
+    const {article} = this.state;
+
     apiClient().get('/stories.json')
       .then((response) => {
-        this.setState({stories: response.data.stories});
+        const {stories} = response.data;
+        this.setState({stories, article: {...article, story_id: stories[0].id}});
       })
   };
 

@@ -20,6 +20,7 @@ class ArticlesController < ApplicationController
     article = Article.new(article_params)
 
     if article.save
+      broadcast_articles_reload
       render json: { article: article }, status: :created
     else
       render json: { errors: article.errors }, status: :unprocessable_entity
@@ -32,6 +33,7 @@ class ArticlesController < ApplicationController
 
   def update
     if @article.update(article_params)
+      broadcast_articles_reload
       render json: { article: @article }
     else
       render json: { errors: @article.errors }, status: :unprocessable_entity
@@ -40,6 +42,7 @@ class ArticlesController < ApplicationController
 
   def destroy
     @article.destroy
+    broadcast_articles_reload
     render body: {}, status: :no_content
   end
 
@@ -51,5 +54,9 @@ class ArticlesController < ApplicationController
 
   def article_params
     params.require(:article).permit(:story_id, :name, :kind, :text)
+  end
+
+  def broadcast_articles_reload
+    ActionCable.server.broadcast 'articles_channel', action: 'RELOAD'
   end
 end

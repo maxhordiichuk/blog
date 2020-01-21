@@ -9,6 +9,7 @@ import GroupSelect from "./GroupSelect";
 import FieldGroups from "./FieldGroups";
 import StoryGroups from "./StoryGroups";
 import ApplicationLayout from "../layouts/ApplicationLayout";
+import ArticlesChannel from "./ArticlesChannel";
 
 class Index extends Component {
   constructor(props) {
@@ -79,6 +80,7 @@ class Index extends Component {
 
     return (
       <ApplicationLayout>
+        <ArticlesChannel fetchArticles={this.fetchArticles}/>
         <div className="mb-4">
           <div className="mb-3 text-right">
             <Link to="/articles/new" className="btn btn-success">New Article</Link>

@@ -20,7 +20,9 @@ services:
     env_file: .env
     depends_on:
       - db
+      - redis
     environment:
+      REDIS_URL: redis://redis:6379
       BUNDLE_PATH: /opt/blog/vendor/bundle
     restart: always
 
@@ -51,6 +53,10 @@ services:
       - postgres-data:/var/lib/postgresql/data
     restart: always
     env_file: .env
+
+  redis:
+    image: redis:5.0.4-alpine
+    command: redis-server
 
 volumes:
   shared-data:

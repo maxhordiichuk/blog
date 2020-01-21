@@ -80,6 +80,4 @@ test:
 #
 production:
   <<: *default
-  database: brainy_yack_test_production
-  username: brainy_yack_test
-  password: <%= ENV['BRAINY_YACK_TEST_DATABASE_PASSWORD'] %>
+  url: <%= ENV['DATABASE_URL'] %>

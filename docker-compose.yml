@@ -1,0 +1,57 @@
+version: "3"
+services:
+  app:
+    build:
+      context: .
+      dockerfile: ./docker/app/Dockerfile
+      args:
+        APP_HOME: /opt/blog
+    command: bash -c "/opt/blog/run_server.sh"
+    image: blog_backend
+    container_name: blog_backend
+    expose:
+      - 3000
+    volumes:
+      - shared-data:/opt/blog/vendor
+      - shared-data:/opt/blog/node_modules
+      - shared-data:/opt/blog/public/assets
+    stdin_open: true
+    tty: true
+    env_file: .env
+    depends_on:
+      - db
+    environment:
+      BUNDLE_PATH: /opt/blog/vendor/bundle
+    restart: always
+
+  web:
+    build:
+      context: .
+      dockerfile: ./docker/web/Dockerfile
+      args:
+        APP_HOME: "/opt/blog"
+        HOST_NAME: "${HOST_NAME}"
+    image: blog_nginx
+    container_name: blog_nginx
+    depends_on:
+      - app
+    ports:
+      - 80:80
+      - 443:443
+    restart: always
+
+  db:
+    image: postgres
+    ports:
+      - 5432:5432
+    environment:
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    restart: always
+    env_file: .env
+
+volumes:
+  shared-data:
+  postgres-data:

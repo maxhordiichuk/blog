@@ -34,4 +34,8 @@ class Article < ApplicationRecord
   default_scope { order(created_at: :desc) }
 
   validates :name, :text, :kind, presence: true
+
+  def as_json(_options)
+    { id: id, name: name, text: text, kind: kind }
+  end
 end
